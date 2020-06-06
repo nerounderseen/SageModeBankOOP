@@ -9,11 +9,14 @@ namespace SageModeBankOOP
             string tempUsername = string.Empty;
             string tempPassword = string.Empty;
             bool shouldExit = false;
-            Bank A = new Bank();
+            bool shouldLogOut = false;
+            decimal value = 0.00m;
+            Bank b = new Bank();
+            b.Name = "BANK.ko";
             while (!shouldExit)
             {
                 Console.Clear();
-                Console.WriteLine($"Welcome to Bank");
+                Console.WriteLine($"Welcome to {b.Name}");
                 switch (ShowMenu("Register", "Login", "Exit"))
                 {
                     case '1':
@@ -21,7 +24,7 @@ namespace SageModeBankOOP
                         Console.WriteLine("[Registration]");
                         Console.Write("Please enter your username: ");
                         tempUsername = Console.ReadLine();
-                        if (A.IsAccountExist(tempUsername))
+                        if (b.IsAccountExist(tempUsername))
                         {
                             Console.WriteLine("Account already exist...");
                             Console.ReadKey();
@@ -30,7 +33,7 @@ namespace SageModeBankOOP
                         {
                             Console.Write("Please enter your password: ");
                             tempPassword = Console.ReadLine();
-                            A.Register(tempUsername, tempPassword);
+                            b.Register(tempUsername, tempPassword);
                         }
                         break;
                     case '2':
@@ -40,21 +43,54 @@ namespace SageModeBankOOP
                         tempUsername = Console.ReadLine();
                         Console.Write("Please enter your password: ");
                         tempPassword = Console.ReadLine();
-                        if (A.Login(tempUsername, tempPassword))
+                        var account = b.Login(tempUsername, tempPassword);
+                        if (account != null)
                         {
-                            switch (ShowMenu("Deposit", "Withdraw", "Transfer", "Exit"))
+                            while (!shouldLogOut)
                             {
-                                case '1':
-                                    Console.Write("Enter Deposit Amount: ");
-                                    decimal value = 0;
-                                    if (decimal.TryParse(Console.ReadLine(), out value))
-                                    {
-                                        balances[currentAccountIndex] += dAmount;
-                                    }
-                                    break;
-                                default:
-                                    break;
+                                Console.Clear();
+                                Console.WriteLine($"Welcome {account.Username}");
+                                Console.WriteLine($"Available Balance {account.Balance}");
+                                switch (ShowMenu("Deposit", "Withdraw", "Transfer", "Transactions", "Exit"))
+                                {
+                                    case '1':
+                                        Console.Clear();
+                                        Console.WriteLine("DEPOSIT");
+                                        Console.Write("Enter Deposit Amount: ");
+                                        if (decimal.TryParse(Console.ReadLine(), out value))
+                                        {
+                                            if (value > 0.00m)
+                                                account.Deposit(value);
+                                        }
+                                            Console.Write("Invalid Amount");
+                                            Console.ReadLine();
+                                        break;
+                                    case '2':
+                                        Console.Clear();
+                                        Console.WriteLine("WITHDRAW");
+                                        Console.Write("Enter Withdrawal Amount: ");
+                                        if (decimal.TryParse(Console.ReadLine(), out value))
+                                        {
+                                            if (value < account.Balance)
+                                                account.Withdraw(value);
+                                        }
+                                            Console.Write("Insufficient Funds");
+                                            Console.ReadLine();
+                                        break;
+                                    case '3':
+                                        Console.WriteLine("TRANSFER");
+                                        break;
+                                    case '4':
+                                        Console.WriteLine("TRANSACTIONS");
+                                        break;
+                                    case '5':
+                                        shouldLogOut = true;
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
+
                         }
                         else
                         {
@@ -84,6 +120,11 @@ namespace SageModeBankOOP
                 Console.WriteLine();
                 return key.KeyChar;
             }
+
+            /*             static decimal InputValue()
+                        {
+
+                        } */
         }
     }
 }
