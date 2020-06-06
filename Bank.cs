@@ -1,22 +1,10 @@
+using System;
+
 namespace SageModeBankOOP
 {
     class Bank
     {
         private int _TotalAccountsRegistered { get; set; }
-        private string _name = "Bank";
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-
-            set
-            {
-                _name = value + " Bank";
-            }
-        }
-
 
         private Account[] Accounts { get; set; }
 
@@ -40,6 +28,11 @@ namespace SageModeBankOOP
 
         public bool Login(string username, string password)
         {
+            foreach (Account account in Accounts)
+            {
+                if (account.Username == username && account.Password == password)
+                    return true;
+            }
             return false;
         }
 
