@@ -9,7 +9,6 @@ namespace SageModeBankOOP
             string tempUsername = string.Empty;
             string tempPassword = string.Empty;
             bool shouldExit = false;
-            bool shouldLogOut = false;
             decimal value = 0.00m;
             Bank b = new Bank();
             b.Name = "BANK.ko";
@@ -46,10 +45,12 @@ namespace SageModeBankOOP
                         var account = b.Login(tempUsername, tempPassword);
                         if (account != null)
                         {
+                            bool shouldLogOut = false;
                             while (!shouldLogOut)
                             {
                                 Console.Clear();
                                 Console.WriteLine($"Welcome {account.Username}");
+                                Console.WriteLine($"User Account ID: {account.Id}");
                                 Console.WriteLine($"Available Balance {account.Balance}");
                                 switch (ShowMenu("Deposit", "Withdraw", "Transfer", "Transactions", "Exit"))
                                 {
@@ -84,7 +85,22 @@ namespace SageModeBankOOP
                                         }
                                         break;
                                     case '3':
+                                        Console.Clear();
                                         Console.WriteLine("TRANSFER");
+                                        Console.Write("Enter Account ID #: ");
+                                        int receiverId = -1;
+                                        if (int.TryParse(Console.ReadLine(), out receiverId))
+                                        {
+                                            Console.Write("Enter Amount to be Transfered: ");
+                                            if (decimal.TryParse(Console.ReadLine(), out value))
+                                            {
+                                                b.Transfer(account, value, receiverId);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Enter a Valid Account ID #");
+                                        }
                                         break;
                                     case '4':
                                         Console.WriteLine("TRANSACTIONS");
@@ -92,11 +108,8 @@ namespace SageModeBankOOP
                                     case '5':
                                         shouldLogOut = true;
                                         break;
-                                    default:
-                                        break;
                                 }
                             }
-
                         }
                         else
                         {
