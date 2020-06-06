@@ -61,9 +61,12 @@ namespace SageModeBankOOP
                                         {
                                             if (value > 0.00m)
                                                 account.Deposit(value);
+                                            else
+                                            {
+                                                Console.Write("Please Enter a Valid Amount");
+                                                Console.ReadLine();
+                                            }
                                         }
-                                            Console.Write("Invalid Amount");
-                                            Console.ReadLine();
                                         break;
                                     case '2':
                                         Console.Clear();
@@ -71,11 +74,14 @@ namespace SageModeBankOOP
                                         Console.Write("Enter Withdrawal Amount: ");
                                         if (decimal.TryParse(Console.ReadLine(), out value))
                                         {
-                                            if (value < account.Balance)
+                                            if (value > account.Balance)
                                                 account.Withdraw(value);
+                                            else
+                                            {
+                                                Console.Write("Insufficient Funds/Incorrect Input");
+                                                Console.ReadLine();
+                                            }
                                         }
-                                            Console.Write("Insufficient Funds");
-                                            Console.ReadLine();
                                         break;
                                     case '3':
                                         Console.WriteLine("TRANSFER");
@@ -120,11 +126,6 @@ namespace SageModeBankOOP
                 Console.WriteLine();
                 return key.KeyChar;
             }
-
-            /*             static decimal InputValue()
-                        {
-
-                        } */
         }
     }
 }

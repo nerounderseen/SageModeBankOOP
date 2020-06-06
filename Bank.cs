@@ -16,16 +16,12 @@ namespace SageModeBankOOP
                 _name = value + " Bank";
             }
         }
-
-
         private Account[] Accounts { get; set; }
-
         public Bank()
         {
             Accounts = new Account[100];
             _TotalAccountsRegistered = 0;
         }
-
         public void Register(string username, string password)
         {
             Accounts[_TotalAccountsRegistered] = new Account
@@ -37,20 +33,18 @@ namespace SageModeBankOOP
             };
             _TotalAccountsRegistered++;
         }
- 
         public Account Login(string username, string password)
         {
             if (IsAccountExist(username))
             {
                 foreach (Account account in Accounts)
                 {
-                    if (account.Username == username && account.Password == password)
+                    if (account != null && account.Username == username && account.Password == password)
                         return account;
                 }
             }
             return null;
         }
-
         public bool IsAccountExist(string username)
         {
             foreach (Account account in Accounts)
@@ -60,7 +54,6 @@ namespace SageModeBankOOP
             }
             return false;
         }
-
         public void Transfer()
         {
 
