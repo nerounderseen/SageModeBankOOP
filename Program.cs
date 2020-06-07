@@ -129,7 +129,7 @@ namespace SageModeBankOOP
                                         //Check Transaction History - polished // salamat bai peter, jet
                                         Console.Clear();
                                         Console.WriteLine("TRANSACTIONS");
-                                        Console.WriteLine("Type\tDate & Time\t\tAmount\tBalance");
+                                        Console.WriteLine("Type\tDate & Time\t\tAmount\tBalance\tUser");
                                         foreach (Transaction record in account.DuplicateArray())
                                         {
                                             string convertName = (record.Target != null ? record.Target.Firstname : "");
