@@ -8,6 +8,8 @@ namespace SageModeBankOOP
         {
             string tempUsername = string.Empty;
             string tempPassword = string.Empty;
+            string tempFirstname = string.Empty;
+            string tempLastname = string.Empty;
             bool shouldExit = false;
             decimal value = 0.00m;
             Bank b = new Bank();
@@ -23,27 +25,32 @@ namespace SageModeBankOOP
                     case '1':
                         Console.Clear();
                         Console.WriteLine("[Registration]");
-                        Console.Write("Please enter your username: ");
+                        Console.Write("Enter username: ");
                         tempUsername = Console.ReadLine();
+                        //System Check if username is already taken
                         if (b.IsAccountExist(tempUsername))
                         {
-                            Console.WriteLine("Account already exist...");
+                            Console.WriteLine("Username already taken");
                             Console.ReadKey();
                         }
                         else
                         {
-                            Console.Write("Please enter your password: ");
+                            Console.Write("Enter password: ");
                             tempPassword = Console.ReadLine();
-                            b.Register(tempUsername, tempPassword);
+                            Console.Write("Register - Firstname: ");
+                            tempFirstname = Console.ReadLine();
+                            Console.Write("Register -  Lastname: ");
+                            tempLastname = Console.ReadLine();
+                            b.Register(tempUsername, tempPassword, tempFirstname, tempLastname);
                         }
                         break;
-                        //Login
+                    //Login
                     case '2':
                         Console.Clear();
                         Console.WriteLine("[Login]");
-                        Console.Write("Please enter your username: ");
+                        Console.Write("Enter username: ");
                         tempUsername = Console.ReadLine();
-                        Console.Write("Please enter your password: ");
+                        Console.Write("Enter password: ");
                         tempPassword = Console.ReadLine();
                         var account = b.Login(tempUsername, tempPassword);
                         if (account != null)
@@ -53,13 +60,13 @@ namespace SageModeBankOOP
                             while (!shouldLogOut)
                             {
                                 Console.Clear();
-                                Console.WriteLine($"Welcome {account.Username}");
+                                Console.WriteLine($"Welcome {account.Firstname} {account.Lastname}");
                                 Console.WriteLine($"User Account ID: {account.Id}");
-                                Console.WriteLine($"Available Balance {account.Balance}");
+                                Console.WriteLine($"Available Balance: {account.Balance}\n\n");
                                 switch (ShowMenu("Deposit", "Withdraw", "Transfer", "Transactions", "Exit"))
                                 {
                                     case '1':
-                                        //Error Handling needed
+                                        //Deposit - done error handling
                                         Console.Clear();
                                         Console.WriteLine("DEPOSIT");
                                         Console.Write("Enter Deposit Amount: ");
@@ -75,7 +82,7 @@ namespace SageModeBankOOP
                                         }
                                         break;
                                     case '2':
-                                        //Error Handling needed
+                                        //Withdrawal - done error handling
                                         Console.Clear();
                                         Console.WriteLine("WITHDRAW");
                                         Console.Write("Enter Withdrawal Amount: ");
@@ -91,7 +98,7 @@ namespace SageModeBankOOP
                                         }
                                         break;
                                     case '3':
-                                        //Transfer Funds - need to optimize
+                                        //Transfer Funds - polished //salamat bai peter
                                         Console.Clear();
                                         Console.WriteLine("TRANSFER");
                                         Console.Write("Enter Account ID #: ");
@@ -119,13 +126,14 @@ namespace SageModeBankOOP
                                         }
                                         break;
                                     case '4':
-                                        //Check Transaction History - need to optimize
+                                        //Check Transaction History - polished // salamat bai peter, jet
                                         Console.Clear();
                                         Console.WriteLine("TRANSACTIONS");
                                         Console.WriteLine("Type\tDate & Time\t\tAmount\tBalance");
                                         foreach (Transaction record in account.DuplicateArray())
                                         {
-                                            Console.WriteLine($"{record.Type}\t{record.Date}\t{record.Amount}\t{record.Balance}");
+                                            string convertName = (record.Target != null ? record.Target.Firstname : "");
+                                            Console.WriteLine($"{record.Type}\t{record.Date}\t{record.Amount}\t{record.Balance}\t{convertName}");
                                         }
                                         Console.ReadKey();
                                         break;
@@ -153,6 +161,7 @@ namespace SageModeBankOOP
                 }
             }
 
+            //Generate Menu Select
             static char ShowMenu(params string[] items)
             {
                 string menuString = "Press ";
