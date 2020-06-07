@@ -37,13 +37,10 @@ namespace SageModeBankOOP
         }
         public Account Login(string lUsername, string lPassword)
         {
-            if (IsAccountExist(lUsername))
+            foreach (Account accnt in newAccounts)
             {
-                foreach (Account accnt in newAccounts)
-                {
-                    if (accnt != null && accnt.Username == lUsername && accnt.Password == lPassword)
-                        return accnt;
-                }
+                if (accnt != null && accnt.Username == lUsername && accnt.Password == lPassword)
+                    return accnt;
             }
             return null;
         }
