@@ -25,7 +25,7 @@ namespace SageModeBankOOP
             Balance += amount;
         }
 
-        public void Transfer(Account receiverAcc)
+        public void Transfer()
         {
 
         }

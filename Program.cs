@@ -75,7 +75,7 @@ namespace SageModeBankOOP
                                         Console.Write("Enter Withdrawal Amount: ");
                                         if (decimal.TryParse(Console.ReadLine(), out value))
                                         {
-                                            if (value > account.Balance)
+                                            if (value < account.Balance)
                                                 account.Withdraw(value);
                                             else
                                             {
@@ -94,12 +94,21 @@ namespace SageModeBankOOP
                                             Console.Write("Enter Amount to be Transfered: ");
                                             if (decimal.TryParse(Console.ReadLine(), out value))
                                             {
-                                                b.Transfer(account, value, receiverId);
+                                                if (value < account.Balance && value > 0)
+                                                {
+                                                    b.Transfer(account, value, receiverId);
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine("Amount Entered is not Possible for Transfer");
+                                                    Console.ReadLine();
+                                                }
                                             }
                                         }
                                         else
                                         {
                                             Console.WriteLine("Enter a Valid Account ID #");
+                                            Console.ReadLine();
                                         }
                                         break;
                                     case '4':
@@ -113,12 +122,12 @@ namespace SageModeBankOOP
                         }
                         else
                         {
-                            Console.WriteLine("Failed!");
+                            Console.WriteLine("Incorrect Username/Password!");
                             Console.ReadLine();
                         }
                         break;
                     case '3':
-                        Console.WriteLine("Good bye!!!");
+                        Console.WriteLine("Thank you for your Patronage!!!");
                         shouldExit = true;
                         break;
                     default:

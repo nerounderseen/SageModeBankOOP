@@ -16,47 +16,47 @@ namespace SageModeBankOOP
                 _name = value + " Bank";
             }
         }
-        private Account[] Accounts { get; set; }
+        private Account[] newAccounts { get; set; }
         public Bank()
         {
-            Accounts = new Account[100];
+            newAccounts = new Account[100];
             _TotalAccountsRegistered = 0;
         }
-        public void Register(string username, string password)
+        public void Register(string rUsername, string rPassword)
         {
-            Accounts[_TotalAccountsRegistered] = new Account
+            newAccounts[_TotalAccountsRegistered] = new Account
             {
                 Id = _TotalAccountsRegistered,
-                Username = username,
-                Password = password,
+                Username = rUsername,
+                Password = rPassword,
                 Balance = 0
             };
             _TotalAccountsRegistered++;
         }
-        public Account Login(string username, string password)
+        public Account Login(string rUsername, string rPassword)
         {
-            if (IsAccountExist(username))
+            if (IsAccountExist(rUsername))
             {
-                foreach (Account account in Accounts)
+                foreach (Account accnt in newAccounts)
                 {
-                    if (account != null && account.Username == username && account.Password == password)
-                        return account;
+                    if (accnt != null && accnt.Username == rUsername && accnt.Password == rPassword)
+                        return accnt;
                 }
             }
             return null;
         }
-        public bool IsAccountExist(string username)
+        public bool IsAccountExist(string rUsername)
         {
-            foreach (Account account in Accounts)
+            foreach (Account accnt in newAccounts)
             {
-                if (account != null && account.Username == username)
+                if (accnt != null && accnt.Username == rUsername)
                     return true;
             }
             return false;
         }
         public void Transfer(Account srcAccnt, decimal value, int trgtAccntID)
         {
-            Account dstAccnt = Accounts[trgtAccntID];
+            Account dstAccnt = newAccounts[trgtAccntID];
             srcAccnt.Balance -= value;
             dstAccnt.Balance += value;
         }
