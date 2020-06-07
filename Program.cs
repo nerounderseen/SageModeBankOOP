@@ -11,13 +11,15 @@ namespace SageModeBankOOP
             bool shouldExit = false;
             decimal value = 0.00m;
             Bank b = new Bank();
-            b.Name = "BANK.ko";
+            b.Name = ".ko";
             while (!shouldExit)
             {
+                //Welcome Screen
                 Console.Clear();
                 Console.WriteLine($"Welcome to {b.Name}");
                 switch (ShowMenu("Register", "Login", "Exit"))
                 {
+                    //Registration
                     case '1':
                         Console.Clear();
                         Console.WriteLine("[Registration]");
@@ -35,6 +37,7 @@ namespace SageModeBankOOP
                             b.Register(tempUsername, tempPassword);
                         }
                         break;
+                        //Login
                     case '2':
                         Console.Clear();
                         Console.WriteLine("[Login]");
@@ -45,6 +48,7 @@ namespace SageModeBankOOP
                         var account = b.Login(tempUsername, tempPassword);
                         if (account != null)
                         {
+                            //If successful Login
                             bool shouldLogOut = false;
                             while (!shouldLogOut)
                             {
@@ -55,6 +59,7 @@ namespace SageModeBankOOP
                                 switch (ShowMenu("Deposit", "Withdraw", "Transfer", "Transactions", "Exit"))
                                 {
                                     case '1':
+                                        //Error Handling needed
                                         Console.Clear();
                                         Console.WriteLine("DEPOSIT");
                                         Console.Write("Enter Deposit Amount: ");
@@ -70,6 +75,7 @@ namespace SageModeBankOOP
                                         }
                                         break;
                                     case '2':
+                                        //Error Handling needed
                                         Console.Clear();
                                         Console.WriteLine("WITHDRAW");
                                         Console.Write("Enter Withdrawal Amount: ");
@@ -85,6 +91,7 @@ namespace SageModeBankOOP
                                         }
                                         break;
                                     case '3':
+                                        //Transfer Funds - need to optimize
                                         Console.Clear();
                                         Console.WriteLine("TRANSFER");
                                         Console.Write("Enter Account ID #: ");
@@ -112,9 +119,18 @@ namespace SageModeBankOOP
                                         }
                                         break;
                                     case '4':
+                                        //Check Transaction History - need to optimize
+                                        Console.Clear();
                                         Console.WriteLine("TRANSACTIONS");
+                                        Console.WriteLine("Type\tDate & Time\t\tAmount\tBalance");
+                                        foreach (Transaction record in account.DuplicateArray())
+                                        {
+                                            Console.WriteLine($"{record.Type}\t{record.Date}\t{record.Amount}\t{record.Balance}");
+                                        }
+                                        Console.ReadKey();
                                         break;
                                     case '5':
+                                        //Logout Logged-in User
                                         shouldLogOut = true;
                                         break;
                                 }
@@ -122,11 +138,13 @@ namespace SageModeBankOOP
                         }
                         else
                         {
+                            //If unsuccessful Login
                             Console.WriteLine("Incorrect Username/Password!");
                             Console.ReadLine();
                         }
                         break;
                     case '3':
+                        //Program Terminate
                         Console.WriteLine("Thank you for your Patronage!!!");
                         shouldExit = true;
                         break;

@@ -13,7 +13,7 @@ namespace SageModeBankOOP
 
             set
             {
-                _name = value + " Bank";
+                _name = "BANK"+ value;
             }
         }
         private Account[] newAccounts { get; set; }
@@ -33,23 +33,23 @@ namespace SageModeBankOOP
             };
             _TotalAccountsRegistered++;
         }
-        public Account Login(string rUsername, string rPassword)
+        public Account Login(string lUsername, string lPassword)
         {
-            if (IsAccountExist(rUsername))
+            if (IsAccountExist(lUsername))
             {
                 foreach (Account accnt in newAccounts)
                 {
-                    if (accnt != null && accnt.Username == rUsername && accnt.Password == rPassword)
+                    if (accnt != null && accnt.Username == lUsername && accnt.Password == lPassword)
                         return accnt;
                 }
             }
             return null;
         }
-        public bool IsAccountExist(string rUsername)
+        public bool IsAccountExist(string xUsername)
         {
             foreach (Account accnt in newAccounts)
             {
-                if (accnt != null && accnt.Username == rUsername)
+                if (accnt != null && accnt.Username == xUsername)
                     return true;
             }
             return false;
@@ -58,7 +58,9 @@ namespace SageModeBankOOP
         {
             Account dstAccnt = newAccounts[trgtAccntID];
             srcAccnt.Balance -= value;
+            srcAccnt.AddTransactions("OUT", value);
             dstAccnt.Balance += value;
+            dstAccnt.AddTransactions("IN", value);
         }
     }
 }
