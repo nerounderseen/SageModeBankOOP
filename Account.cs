@@ -12,7 +12,7 @@ namespace SageModeBankOOP
         private Transaction[] Transactions { get; set; }
         public Account()
         {
-            Transactions = new Transaction[1000];
+            Transactions = new Transaction[25];
             Balance = Balance;
         }
         public void Deposit(decimal amount)
@@ -37,7 +37,7 @@ namespace SageModeBankOOP
             _xCounter++;
         }
 
-        public Transaction[] DuplicateArray()
+        public Transaction[] GetArrayTx()
         {
             Transaction[] CopiedTransArray = new Transaction[_xCounter];
             for (int i = 0; i < _xCounter; i++)

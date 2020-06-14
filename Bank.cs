@@ -3,6 +3,8 @@ namespace SageModeBankOOP
     class Bank
     {
         private int _TotalAccountsRegistered { get; set; }
+        public string BankName { get; set; }
+        public string BankID { get; set; }
         private string _name = "Bank";
         public string Name
         {
@@ -13,13 +15,13 @@ namespace SageModeBankOOP
 
             set
             {
-                _name = "BANK" + value;
+                _name = BankName + value;
             }
         }
         private Account[] newAccounts { get; set; }
         public Bank()
         {
-            newAccounts = new Account[100];
+            newAccounts = new Account[10];
             _TotalAccountsRegistered = 0;
         }
         public void Register(string rUsername, string rPassword, string rFirstname, string rLastname)

@@ -1,167 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SageModeBankOOP
 {
     class Program
     {
+        public static List<Bank> BankList = new List<Bank>();
+        static bool ShouldTerminate = false;
+        static string tempBankName = String.Empty;
+        static string tempBankID = String.Empty;
         static void Main(string[] args)
         {
-            string tempUsername = string.Empty;
-            string tempPassword = string.Empty;
-            string tempFirstname = string.Empty;
-            string tempLastname = string.Empty;
-            bool shouldExit = false;
-            decimal value = 0.00m;
-            Bank b = new Bank();
-            b.Name = ".ko";
-            while (!shouldExit)
+
+            while (!ShouldTerminate)
             {
-                //Welcome Screen
                 Console.Clear();
-                Console.WriteLine($"Welcome to {b.Name}");
-                switch (ShowMenu("Register", "Login", "Exit"))
+                Console.WriteLine("Banking Terminal\n");
+                Console.WriteLine("Please select an Option");
+                switch (ShowMenu("[Register a Bank]", "[Register/Login an Account]", "[Display Bank List]", "[Exit]"))
                 {
-                    //Registration
                     case '1':
-                        Console.Clear();
-                        Console.WriteLine("[Registration]");
-                        Console.Write("Enter username: ");
-                        tempUsername = Console.ReadLine();
-                        //System Check if username is already taken
-                        if (b.IsAccountExist(tempUsername))
-                        {
-                            Console.WriteLine("Username already taken");
-                            Console.ReadKey();
-                        }
-                        else
-                        {
-                            Console.Write("Enter password: ");
-                            tempPassword = Console.ReadLine();
-                            Console.Write("Register - Firstname: ");
-                            tempFirstname = Console.ReadLine();
-                            Console.Write("Register -  Lastname: ");
-                            tempLastname = Console.ReadLine();
-                            b.Register(tempUsername, tempPassword, tempFirstname, tempLastname);
-                        }
+                        BankGenerate();
                         break;
-                    //Login
                     case '2':
-                        Console.Clear();
-                        Console.WriteLine("[Login]");
-                        Console.Write("Enter username: ");
-                        tempUsername = Console.ReadLine();
-                        Console.Write("Enter password: ");
-                        tempPassword = Console.ReadLine();
-                        var account = b.Login(tempUsername, tempPassword);
-                        if (account != null)
-                        {
-                            //If successful Login
-                            bool shouldLogOut = false;
-                            while (!shouldLogOut)
-                            {
-                                Console.Clear();
-                                Console.WriteLine($"Welcome {account.Firstname} {account.Lastname}");
-                                Console.WriteLine($"User Account ID: {account.Id}");
-                                Console.WriteLine($"Available Balance: {account.Balance}\n\n");
-                                switch (ShowMenu("Deposit", "Withdraw", "Transfer", "Transactions", "Exit"))
-                                {
-                                    case '1':
-                                        //Deposit - done error handling
-                                        Console.Clear();
-                                        Console.WriteLine("DEPOSIT");
-                                        Console.Write("Enter Deposit Amount: ");
-                                        if (decimal.TryParse(Console.ReadLine(), out value))
-                                        {
-                                            if (value > 0.00m)
-                                                account.Deposit(value);
-                                            else
-                                            {
-                                                Console.Write("Please Enter a Valid Amount");
-                                                Console.ReadLine();
-                                            }
-                                        }
-                                        break;
-                                    case '2':
-                                        //Withdrawal - done error handling
-                                        Console.Clear();
-                                        Console.WriteLine("WITHDRAW");
-                                        Console.Write("Enter Withdrawal Amount: ");
-                                        if (decimal.TryParse(Console.ReadLine(), out value))
-                                        {
-                                            if (value < account.Balance)
-                                                account.Withdraw(value);
-                                            else
-                                            {
-                                                Console.Write("Insufficient Funds/Incorrect Input");
-                                                Console.ReadLine();
-                                            }
-                                        }
-                                        break;
-                                    case '3':
-                                        //Transfer Funds - polished //salamat bai peter
-                                        Console.Clear();
-                                        Console.WriteLine("TRANSFER");
-                                        Console.Write("Enter Account ID #: ");
-                                        int receiverId = -1;
-                                        if (int.TryParse(Console.ReadLine(), out receiverId))
-                                        {
-                                            Console.Write("Enter Amount to be Transfered: ");
-                                            if (decimal.TryParse(Console.ReadLine(), out value))
-                                            {
-                                                if (value < account.Balance && value > 0)
-                                                {
-                                                    b.Transfer(account, value, receiverId);
-                                                }
-                                                else
-                                                {
-                                                    Console.WriteLine("Amount Entered is not Possible for Transfer");
-                                                    Console.ReadLine();
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("Enter a Valid Account ID #");
-                                            Console.ReadLine();
-                                        }
-                                        break;
-                                    case '4':
-                                        //Check Transaction History - polished // salamat bai peter, jet
-                                        Console.Clear();
-                                        Console.WriteLine("TRANSACTIONS");
-                                        Console.WriteLine("Type\tDate & Time\t\tAmount\tBalance\tUser");
-                                        foreach (Transaction record in account.DuplicateArray())
-                                        {
-                                            string convertName = (record.Target != null ? record.Target.Firstname : "");
-                                            Console.WriteLine($"{record.Type}\t{record.Date}\t{record.Amount}\t{record.Balance}\t{convertName}");
-                                        }
-                                        Console.ReadKey();
-                                        break;
-                                    case '5':
-                                        //Logout Logged-in User
-                                        shouldLogOut = true;
-                                        break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            //If unsuccessful Login
-                            Console.WriteLine("Incorrect Username/Password!");
-                            Console.ReadLine();
-                        }
+                        RegisterLogin();
                         break;
                     case '3':
-                        //Program Terminate
-                        Console.WriteLine("Thank you for your Patronage!!!");
-                        shouldExit = true;
+                        ShowBankList();
+                        break;
+                    case '4':
+                        ShouldTerminate = true;
                         break;
                     default:
                         break;
                 }
             }
 
-            //Generate Menu Select
             static char ShowMenu(params string[] items)
             {
                 string menuString = "Press ";
@@ -174,6 +48,108 @@ namespace SageModeBankOOP
                 ConsoleKeyInfo key = Console.ReadKey();
                 Console.WriteLine();
                 return key.KeyChar;
+            }
+
+            static void BankGenerate()
+            {
+                Console.Clear();
+                Console.WriteLine("[Generate a Bank]\n");
+                Console.Write("Enter Bank Name: ");
+                tempBankName = Console.ReadLine().ToUpper();
+                Console.Write("Create a Unique Identifier Key: ");
+                tempBankID = Console.ReadLine();
+                if (BankList.Exists(x => x.BankName == tempBankName))
+                {
+                    Console.Clear();
+                    Console.WriteLine("[Generate a Bank]\n");
+                    Console.Write("Bank Name Exists");
+                    Console.ReadLine();
+                }
+                else if (BankList.Exists(x => x.BankID == tempBankID))
+                {
+                    Console.Clear();
+                    Console.WriteLine("[Generate a Bank]\n");
+                    Console.Write("Bank ID Exists");
+                    Console.ReadLine();
+                }
+                else
+                {
+                    RegisterBank();
+                }
+            }
+
+            static void RegisterBank()
+            {
+                Console.Clear();
+                BankList.Add(new Bank {BankName = tempBankName, BankID = tempBankID});
+                Console.WriteLine("[Generate a Bank]\n");
+                Console.WriteLine("Succefully Registered BankList Details");
+                Console.ReadKey();
+            }
+
+            static void RegisterLogin()
+            {
+                if (BankList.Count > 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Banking Terminal\n");
+                    Console.Write("Enter Bank ID: ");
+                    tempBankID = Console.ReadLine();
+                    if (BankList.Exists(x => x.BankID == tempBankID))
+                    {
+                        Console.Clear();
+                        GetBank();
+                        Console.WriteLine("Banking Terminal\n");
+                        Console.WriteLine("Success!");
+                        Console.WriteLine($"Welcome To ");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Banking Terminal\n");
+                        Console.WriteLine("Enter a Valid Bank Name or Bank ID");
+                        Console.ReadKey();
+                    }
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Banking Terminal\n");
+                    Console.Write("[Register a Bank] before [Registering an Account].");
+                    Console.ReadKey();
+                }
+            }
+
+            static void ShowBankList()
+            {
+                Console.Clear();
+                Console.WriteLine("Banking Terminal\n");
+                Console.WriteLine("Bank Name\t\tBank ID");
+                if (BankList.Count > 0)
+                {
+                    foreach (var bank in BankList)
+                    {
+                        Console.WriteLine($"{bank.BankName}\t\t\t{bank.BankID}");
+                    }
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Banking Terminal\n");
+                    Console.Write("No Registered Bank Available to Display...");
+                }
+                Console.ReadLine();
+            }
+
+            static Bank GetBank()
+            {
+                foreach (Bank bank in BankList)
+                {
+                    if (bank.BankID != null && bank.BankID == tempBankID)
+                        return bank;
+                }
+                return null;
             }
         }
     }
