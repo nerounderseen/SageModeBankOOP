@@ -2,49 +2,14 @@ namespace SageModeBankOOP
 {
     class Account
     {
-        private int _xCounter = 0;
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
-        public decimal Balance { get; set; }
+        private int _counter =0;
+        public int id { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
+        public string firstname { get; set; }
+        public string lastname { get; set; }
+        public decimal balance { get; set; }
         private Transaction[] Transactions { get; set; }
-        public Account()
-        {
-            Transactions = new Transaction[25];
-            Balance = Balance;
-        }
-        public void Deposit(decimal amount)
-        {
-            Balance += amount;
-            AddTransactions("DPST", amount, this);
-        }
-        public void Withdraw(decimal amount)
-        {
-            Balance -= amount;
-            AddTransactions("WTHDRW", amount);
-        }
-        public void AddTransactions(string type, decimal amount, Account target = null)
-        {
-            Transactions[_xCounter] = new Transaction
-            {
-                Type = type,
-                Amount = amount,
-                Balance = Balance,
-                Target = target
-            };
-            _xCounter++;
-        }
 
-        public Transaction[] GetArrayTx()
-        {
-            Transaction[] CopiedTransArray = new Transaction[_xCounter];
-            for (int i = 0; i < _xCounter; i++)
-            {
-                CopiedTransArray[i] = Transactions[i];
-            }
-            return CopiedTransArray;
-        }
     }
 }
