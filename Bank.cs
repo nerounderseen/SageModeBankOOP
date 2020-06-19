@@ -15,18 +15,25 @@ namespace SageModeBankOOP
             newAccounts = new Account[10];
             _totalAccountsRegistered = 0;
         }
-        public void Registration(string uname, string pword, string fname, string lname)
+        public void Registration(string uname, string pword)
         {
             newAccounts[_totalAccountsRegistered] = new Account
             {
                 id = _totalAccountsRegistered,
                 username = uname,
                 password = pword,
-                firstname = fname,
-                lastname = lname,
                 balance = 0
             };
             _totalAccountsRegistered++;
+        }
+        public Account Login(string lUsername, string lPassword)
+        {
+            foreach (Account accnt in newAccounts)
+            {
+                if (accnt != null && accnt.username == lUsername && accnt.password == lPassword)
+                    return accnt;
+            }
+            return null;
         }
     }
 }
