@@ -35,5 +35,13 @@ namespace SageModeBankOOP
             }
             return null;
         }
+        public void Transfer(Account srcAccnt, decimal value, int trgtAccntID)
+        {
+            Account dstAccnt = newAccounts[trgtAccntID];
+            srcAccnt.balance -= value;
+            srcAccnt.AddTransactions("OUT", value, dstAccnt);
+            dstAccnt.balance += value;
+            dstAccnt.AddTransactions("IN", value, srcAccnt);
+        }
     }
 }

@@ -12,6 +12,8 @@ namespace SageModeBankOOP
         static string tempSelectBank = string.Empty;
         static string tempUsername = string.Empty;
         static string tempPassword = string.Empty;
+        static decimal tAmount
+         = 0.0M;
         static void Main(string[] args)
         {
             while (!shouldExit)
@@ -78,12 +80,77 @@ namespace SageModeBankOOP
                                                     switch (ShowMenu("Deposit", "Withdraw", "Transfer", "Transactions", "Logout"))
                                                     {
                                                         case '1':
+                                                            Console.Clear();
+                                                            Console.WriteLine("DEPOSIT");
+                                                            Console.Write("Enter Deposit Amount: ");
+                                                            if (decimal.TryParse(Console.ReadLine(), out tAmount
+                                                            ))
+                                                            {
+                                                                if (tAmount
+                                                                 > 0.00m)
+                                                                    account.Deposit(tAmount
+                                                                    );
+                                                                else
+                                                                {
+                                                                    Console.Write("Please Enter a Valid Amount");
+                                                                    Console.ReadLine();
+                                                                }
+                                                            }
                                                             break;
                                                         case '2':
+                                                            Console.Clear();
+                                                            Console.WriteLine("WITHDRAW");
+                                                            Console.Write("Enter Withdrawal Amount: ");
+                                                            if (decimal.TryParse(Console.ReadLine(), out tAmount
+                                                            ))
+                                                            {
+                                                                if (tAmount
+                                                                 < account.balance)
+                                                                    account.Withdraw(tAmount
+                                                                    );
+                                                                else
+                                                                {
+                                                                    Console.Write("Insufficient Funds/Incorrect Input");
+                                                                    Console.ReadLine();
+                                                                }
+                                                            }
                                                             break;
                                                         case '3':
-                                                            break;
+                                                            Console.Clear();
+                                                            Console.WriteLine("TRANSFER");
+                                                            Console.Write("Enter Account ID #: ");
+                                                            int receiverId = -1;
+                                                            if (int.TryParse(Console.ReadLine(), out receiverId))
+                                                            {
+                                                                Console.Write("Enter Amount to be Transfered: ");
+                                                                if (decimal.TryParse(Console.ReadLine(), out tAmount
+                                                                ))
+                                                                {
+                                                                    if (tAmount
+                                                                     < account.balance && tAmount
+                                                                     > 0)
+                                                                    {
+                                                                        bEntity.Transfer(account, tAmount
+                                                                        , receiverId);
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        Console.WriteLine("Amount Entered is not Possible for Transfer");
+                                                                        Console.ReadLine();
+                                                                    }
+                                                                }
+                                                            }
+                                                                break;
                                                         case '4':
+                                                            Console.Clear();
+                                                            Console.WriteLine("TRANSACTIONS");
+                                                            Console.WriteLine("Type\tDate & Time\t\tAmount\tBalance\tUser");
+                                                            foreach (Transaction record in account.ShowTx())
+                                                            {
+                                                                string convertName = (record.Target != null ? record.Target.username : "");
+                                                                Console.WriteLine($"{record.Type}\t{record.Date}\t{record.Amount}\t{record.Balance}\t{convertName}");
+                                                            }
+                                                            Console.ReadKey();
                                                             break;
                                                         case '5':
                                                             shouldLogout = true;
@@ -108,7 +175,7 @@ namespace SageModeBankOOP
                         {
                             foreach (var bank in bankList)
                             {
-                                Console.WriteLine($"{bank._name}\t\t\t{bank._id}");
+                                Console.Write($"{bank._name}\t\t\t{bank._id}");
                             }
                         }
                         else

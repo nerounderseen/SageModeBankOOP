@@ -2,7 +2,7 @@ namespace SageModeBankOOP
 {
     class Account
     {
-        private int _counter = 0;
+        private int _counter;
         public int id { get; set; }
         public string username { get; set; }
         public string password { get; set; }
@@ -33,6 +33,15 @@ namespace SageModeBankOOP
                 Target = target
             };
             _counter++;
+        }
+        public Transaction[] ShowTx()
+        {
+            Transaction[] CopiedTransArray = new Transaction[_counter];
+            for (int i = 0; i < _counter; i++)
+            {
+                CopiedTransArray[i] = Transactions[i];
+            }
+            return CopiedTransArray;
         }
     }
 }
