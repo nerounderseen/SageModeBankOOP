@@ -3,6 +3,7 @@ namespace SageModeBankOOP
     class Account
     {
         private int _counter;
+        private int _sizeIncrease = 2;
         public int id { get; set; }
         public string username { get; set; }
         public string password { get; set; }
@@ -10,7 +11,7 @@ namespace SageModeBankOOP
         private Transaction[] Transactions { get; set; }
         public Account()
         {
-            Transactions = new Transaction[10];
+            Transactions = new Transaction[2];
             balance = balance;
         }
         public void Deposit(decimal amount)
@@ -25,13 +26,32 @@ namespace SageModeBankOOP
         }
         public void AddTransactions(string type, decimal amount, Account target = null)
         {
-            Transactions[_counter] = new Transaction
+            if (_counter < Transactions.Length)
             {
-                Type = type,
-                Amount = amount,
-                Balance = balance,
-                Target = target
-            };
+                Transactions[_counter] = new Transaction
+                {
+                    Type = type,
+                    Amount = amount,
+                    Balance = balance,
+                    Target = target
+                };
+            }
+            else
+            {
+                Transaction[] TempTransaction = new Transaction[Transactions.Length + _sizeIncrease];
+                for (int x = 0; x < _counter; x++)
+                {
+                    TempTransaction[x] = Transactions[x];
+                }
+                Transactions = TempTransaction;
+                Transactions[_counter] = new Transaction
+                {
+                    Type = type,
+                    Amount = amount,
+                    Balance = balance,
+                    Target = target
+                };
+            }
             _counter++;
         }
         public Transaction[] ShowTx()

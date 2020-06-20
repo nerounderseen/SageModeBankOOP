@@ -7,23 +7,43 @@ namespace SageModeBankOOP
     class Bank
     {
         private int _totalAccountsRegistered = 0;
-        public string _name { get; set; }
-        public string _id { get; set; }
+        private int _sizeIncrease = 5;
+        public string name { get; set; }
+        public string id { get; set; }
         private Account[] newAccounts { get; set; }
         public Bank()
         {
-            newAccounts = new Account[10];
+            newAccounts = new Account[2];
             _totalAccountsRegistered = 0;
         }
         public void Registration(string uname, string pword)
         {
-            newAccounts[_totalAccountsRegistered] = new Account
+            if (_totalAccountsRegistered < newAccounts.Length)
             {
-                id = _totalAccountsRegistered,
-                username = uname,
-                password = pword,
-                balance = 0
-            };
+                newAccounts[_totalAccountsRegistered] = new Account
+                {
+                    id = _totalAccountsRegistered,
+                    username = uname,
+                    password = pword,
+                    balance = 0
+                };
+            }
+            else
+            {
+                Account[] TempAccounts = new Account[newAccounts.Length + _sizeIncrease];
+                for (int x = 0; x < _totalAccountsRegistered; x++)
+                {
+                    TempAccounts[x] = newAccounts[x];
+                }
+                newAccounts = TempAccounts;
+                newAccounts[_totalAccountsRegistered] = new Account
+                {
+                    id = _totalAccountsRegistered,
+                    username = uname,
+                    password = pword,
+                    balance = 0
+                };
+            }
             _totalAccountsRegistered++;
         }
         public Account Login(string lUsername, string lPassword)
@@ -35,13 +55,22 @@ namespace SageModeBankOOP
             }
             return null;
         }
-        public void Transfer(Account srcAccnt, decimal value, int trgtAccntID)
+        public bool IsAccountExist(string xUsername)
+        {
+            foreach (Account accnt in newAccounts)
+            {
+                if (accnt != null && accnt.username == xUsername)
+                    return true;
+            }
+            return false;
+        }
+        public void Transfer(Account srcAccnt, decimal amount, int trgtAccntID)
         {
             Account dstAccnt = newAccounts[trgtAccntID];
-            srcAccnt.balance -= value;
-            srcAccnt.AddTransactions("OUT", value, dstAccnt);
-            dstAccnt.balance += value;
-            dstAccnt.AddTransactions("IN", value, srcAccnt);
+            srcAccnt.balance -= amount;
+            srcAccnt.AddTransactions("OUT", amount, dstAccnt);
+            dstAccnt.balance += amount;
+            dstAccnt.AddTransactions("IN", amount, srcAccnt);
         }
     }
 }
